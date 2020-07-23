@@ -33,19 +33,19 @@ jobs:
       run: |
         for stack in ${STACKS}
         do
-          echo "make format platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack"
+          make format platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack
         done
 
     - name: Terraform validate
       run: |
         for stack in ${STACKS}
         do
-          echo "make validate platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack"
+          make validate platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack
         done
 
     - name: Terraform plan
       run: |
         for stack in ${STACKS}
         do
-          echo "make plan platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack"
+          make plan platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack
         done
