@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  pull_request
+
+env:
+  TF_VERSION: 0.12.26
+  STACKS: "aaa bbb ccc"
+
+jobs:
+  ci:
+    name: ci-terraform
+    runs-on: ubuntu-latest
+    if: startsWith(github.base_ref, 'env/')
+
+    steps:
+
+    - name: Pull code
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1.1.0
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - name: Setup Parrameters
+      run: |
+        echo ::set-env name=PLATFORM    ::$(echo ${GITHUB_BASE_REF} | cut -d'/' -f2)
+        echo ::set-env name=ENVIRONMENT ::$(echo ${GITHUB_BASE_REF} | cut -d'/' -f3)
+        echo ::set-env name=REGION      ::$(echo ${GITHUB_BASE_REF} | cut -d'/' -f4)
+
+    - name: Terraform format
+      run: |
+        for stack in ${STACKS}
+        do
+          echo "make format platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack"
+        done
+
+    - name: Terraform validate
+      run: |
+        for stack in ${STACKS}
+        do
+          echo "make validate platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack"
+        done
+
+    - name: Terraform plan
+      run: |
+        for stack in ${STACKS}
+        do
+          echo "make plan platform=${PLATFORM} environment=${ENVIRONMENT} region=${REGION} stack=$stack"
+        done
